@@ -64,38 +64,31 @@ Using Notepad, create an empty file `D:\BCP\myFirstImport.bcp` and insert the fo
 
 Alternatively, you can execute the following PowerShell script to create and populate the data file:
 ```powershell
-cls
+CLEAR-HOST
 # revise directory as desired
-$dir = 'D:\BCP\';
+$dir = 'D:\BCP'
 
-$bcpFile = Join-Path -Path $dir -ChildPath 'MyFirstImport.bcp';
+$bcpFile = Join-Path -Path $dir -ChildPath 'MyFirstImport.bcp'
 
 # Confirm directory exists
 IF ((Test-Path -Path $dir) -eq 0)
 {
-    Write-Host "The path $dir does not exist; please create or modify the directory.";
-    RETURN;
-};
+    Write-Host "The path $dir does not exist; please create or modify the directory."
+    RETURN
+}
 
 # clear content, will error if file does not exist, can be ignored
-Clear-Content -Path $bcpFile -ErrorAction SilentlyContinue;
+Clear-Content -Path $bcpFile -ErrorAction SilentlyContinue
 
 # Add data
-Add-Content -Path $bcpFile -Value '1,Anthony,Grosse,1980-02-23';
-Add-Content -Path $bcpFile -Value '2,Alica,Fatnowna,1963-11-14';
-Add-Content -Path $bcpFile -Value '3,Stella,Rosenhain,1992-03-02';
+Add-Content -Path $bcpFile -Value '1,Anthony,Grosse,1980-02-23'
+Add-Content -Path $bcpFile -Value '2,Alica,Fatnowna,1963-11-14'
+Add-Content -Path $bcpFile -Value '3,Stella,Rosenhain,1992-03-02'
 
 #Review content
-Get-Content -Path $bcpFile;
-Invoke-Item $bcpFile;
+Get-Content -Path $bcpFile
 ```
-
-## Creating the Format Files<a name="create_format_file"></a>
-SQL Server support two types of format file: non-XML format and XML format.  The non-XML format is the original format that is supported by earlier versions of SQL Server.
-
-### **Creating a Non-XML Format File**<a name="nonxml_format_file"></a>
-Please review [Non-XML Format Files (SQL Server)](../../relational-databases/import-export/non-xml-format-files-sql-server.md) for detailed information.  The following command will use the [bcp utility](../../tools/bcp-utility.md) to generate a non-xml format file, `myFirstImport.fmt`, based on the schema of `myFirstImport`.  To use a bcp command to create a format file, specify the **format** argument and use **nul** instead of a data-file path.  The format option also requires the **-f** option.  In addition, for this example, the qualifier **c** is used to specify character data, **t,** is used to specify a comma as a [field terminator](../../relational-databases/import-export/specify-field-and-row-terminators-sql-server.md), and **T** is used to specify a trusted connection using integrated security.  At a command prompt, enter the following command:
-
+ 
 ```cmd
 bcp TestDatabase.dbo.myFirstImport format nul -c -f D:\BCP\myFirstImport.fmt -t, -T
 
